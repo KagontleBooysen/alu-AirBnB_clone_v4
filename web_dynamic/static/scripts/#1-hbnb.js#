@@ -1,0 +1,6 @@
+$( document ).ready(function() {
+    if($(":amenity_id").click( function() {
+	alert("xD");
+    }));
+});
+
