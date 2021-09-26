@@ -27,11 +27,28 @@ $( document ).ready(function() {
 		$("#api_status").addClass("available");
 	});
 
-	load();
-	async function load()
-	{
-		let data = await ajaxConn(url_api+"/places_search/", "POST", "{}");
+	$('.filters button').click(function(e) {
+		load(true);
+	});
 
+	load(false);
+	async function load(isFiltersAplicated)
+	{
+		let dataSend = "{}";
+
+		if (isFiltersAplicated)
+		{
+			let amenitiesList = [];
+
+			for (let i in list_amenities)
+			{
+				amenitiesList.push(i);
+			}
+			dataSend = JSON.stringify({amenities: amenitiesList});
+		}
+
+		let data = await ajaxConn(url_api+"/places_search/", "POST", dataSend);;
+		
 		let html = "";
 
 		for (let i in data)

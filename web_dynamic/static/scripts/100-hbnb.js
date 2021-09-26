@@ -1,5 +1,7 @@
 $( document ).ready(function() {
 	let list_amenities = {};
+	let list_states = {};
+	let list_cities = {};
 	let url_api = 'http://0.0.0.0:5001/api/v1';
 
 	$('.amenities .popover ul li input').click(function(e) {
@@ -23,15 +25,103 @@ $( document ).ready(function() {
 			$('.amenities h4').text(text.substring(0, text.length-2));
 	});
 
+
+	$('.locations .popover ul li h2 input').click(function(e) {
+		if (list_states[e.target.dataset.id] === undefined)
+		{
+			list_states[e.target.dataset.id] = e.target.dataset.name;
+		}
+		else
+		{
+			delete list_states[e.target.dataset.id];
+		}
+
+		printSC();
+	});
+
+	$('.locations .popover ul li ul li input').click(function(e) {
+		if (list_cities[e.target.dataset.id] === undefined)
+		{
+			list_cities[e.target.dataset.id] = e.target.dataset.name;
+		}
+		else
+		{
+			delete list_cities[e.target.dataset.id];
+		}
+
+		printSC();
+	});
+
+	function printSC()
+	{
+		let text = "";
+		for (let elem in list_states) {
+			text += list_states[elem] + ", ";
+		}
+
+		let text2 = "";
+		for (let elem2 in list_cities) {
+			text2 += list_cities[elem2] + ", ";
+		}
+
+		text = text.substring(0, text.length-2)
+		text2 = text2.substring(0, text2.length-2);
+
+		if (text2 !== "")
+		{
+			if (text !== "")
+				text += ", ";
+			text += text2;
+		}
+
+		$('.locations h4').html(text);
+	}
+
+
+
 	$.get(url_api+"/status/", function (data) {
 		$("#api_status").addClass("available");
 	});
 
-	load();
-	async function load()
-	{
-		let data = await ajaxConn(url_api+"/places_search/", "POST", "{}");
+	$('.filters button').click(function(e) {
+		load(true);
+	});
 
+	load(false);
+	async function load(isFiltersAplicated)
+	{
+		let dataSend = "{}";
+
+		if (isFiltersAplicated)
+		{
+			let amenitiesList = [];
+			let statesList = [];
+			let citiesList = [];
+
+			for (let i in list_amenities)
+			{
+				amenitiesList.push(i);
+			}
+
+			for (let i in list_states)
+			{
+				statesList.push(i);
+			}
+
+			for (let i in list_cities)
+			{
+				citiesList.push(i);
+			}
+
+			dataSend = JSON.stringify({
+				states: statesList,
+				cities: citiesList,
+				amenities: amenitiesList
+			});
+		}
+
+		let data = await ajaxConn(url_api+"/places_search/", "POST", dataSend);;
+		
 		let html = "";
 
 		for (let i in data)
