@@ -155,6 +155,10 @@ EOF  all  create  destroy  help  quit  show  update
 ## Bugs
 No known bugs at this time. 
 
+## Authors New
+Kagontle Booysen - [Github](https://github.com/KagontleBooysen)   
+Beline Mugisha - [Github](https://github.com/Mugisha-Beline) 
+
 ## Authors
 Alexa Orrico - [Github](https://github.com/alexaorrico) / [Twitter](https://twitter.com/alexa_orrico)  
 Jennifer Huang - [Github](https://github.com/jhuang10123) / [Twitter](https://twitter.com/earthtojhuang)  
